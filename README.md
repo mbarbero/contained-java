@@ -1,19 +1,30 @@
 # Contained Java
-Experiment with distroless docker images + Java 9 custom image runtime
+Experiment with distroless docker images + Java 11 custom image runtime
 
 ## docker image list
 
 ```
-REPOSITORY                             TAG                         SIZE
-mbarbero/example-app                   official-openjdk9-hotspot   48.3MB
-mbarbero/example-app                   openjdk9-hotspot            47.1MB
-mbarbero/example-app                   openjdk9-openj9             49.1MB
-mbarbero/example-app                   openjdk9-hotspot-alpine     45.6MB
-mbarbero/example-app                   openjdk9-openj9-alpine      47.6MB
-mbarbero/distroless-base               latest                      16.5MB
-mbarbero/distroless-java               latest                      16.9MB
-mbarbero/distroless-openj9             latest                      17MB
-mbarbero/distroless-openjdk-official   latest                      18.6MB
+REPOSITORY                  TAG                                     SIZE
+mbarbero/spring-petclinic   adoptopenjdk-jdk11-openj9-alpine        110MB
+mbarbero/spring-petclinic   adoptopenjdk-jdk11-openj9-distroless    110MB
+mbarbero/spring-petclinic   adoptopenjdk-jdk11-hotspot-distroless   108MB
+mbarbero/spring-petclinic   adoptopenjdk-jdk11-hotspot-alpine       108MB
+mbarbero/example-app        jdk-java-net-jdk11-distroless           49.7MB
+mbarbero/example-app        openjdk-jdk11-debian-unstable-slim      98.5MB
+mbarbero/example-app        openjdk-jdk11-distroless                51.3MB
+mbarbero/example-app        adoptopenjdk-jdk11-openj9-alpine        50.9MB
+mbarbero/example-app        adoptopenjdk-jdk11-openj9-distroless    51MB
+mbarbero/example-app        adoptopenjdk-jdk11-hotspot-alpine       49.3MB
+mbarbero/example-app        adoptopenjdk-jdk11-hotspot-distroless   49.3MB
+mbarbero/alpine-jbase       alpine-3.8-glibc2.28-r0                 15.8MB
+mbarbero/distroless         base                                    15.5MB
+mbarbero/distroless         jbase                                   15.8MB
+mbarbero/distroless         jbase-libgcc1                           15.9MB
+mbarbero/distroless         jbase-libgcc1-libstdcpp6                17.5MB
+mbarbero/distroless         base-unstable                           17.4MB
+mbarbero/distroless         jbase-unstable                          17.7MB
+mbarbero/distroless         jbase-libgcc1-unstable                  17.8MB
+mbarbero/distroless         jbase-libgcc1-libstdcpp6-unstable       19.4MB
 ```
 
 ## Example app
@@ -32,36 +43,96 @@ Hello World!
 
 ## Java versions
 ```
-$ docker run -it --rm --entrypoint /app/bin/java mbarbero/example-app:openjdk9-hotspot -version
-openjdk version "9-internal"
-OpenJDK Runtime Environment (build 9-internal+0-adhoc.jenkins.openjdk)
-OpenJDK 64-Bit Server VM (build 9-internal+0-adhoc.jenkins.openjdk, mixed mode)
+$ example-app/test-versions.sh
+***>>> adoptopenjdk-jdk11-openj9-distroless <<<***
+Hello World
+openjdk version "11.0.1" 2018-10-16
+OpenJDK Runtime Environment AdoptOpenJDK (build 11.0.1+13)
+Eclipse OpenJ9 VM AdoptOpenJDK (build openj9-0.11.0, JRE 11 Linux amd64-64-Bit Compressed References 20181020_70 (JIT enabled, AOT enabled)
+OpenJ9   - 090ff9dc
+OMR      - ea548a66
+JCL      - f62696f378 based on jdk-11.0.1+13)
+VM settings:
+    Max. Heap Size (Estimated): 983.00M
+    Using VM: Eclipse OpenJ9 VM
 
-$ docker run -it --rm --entrypoint /app/bin/java mbarbero/example-app:openjdk9-hotspot-alpine -version
-openjdk version "9-internal"
-OpenJDK Runtime Environment (build 9-internal+0-adhoc.jenkins.openjdk)
-OpenJDK 64-Bit Server VM (build 9-internal+0-adhoc.jenkins.openjdk, mixed mode)
+java.base@11.0.1
+tech.barbero.contained.java.example@0.0.1-SNAPSHOT
 
-$ docker run -it --rm --entrypoint /app/bin/java mbarbero/example-app:openjdk9-openj9 -version
-openjdk version "9-internal"
-OpenJDK Runtime Environment (build 9-internal+0-adhoc.jenkins.openjdk)
-Eclipse OpenJ9 VM (build 2.9, JRE 9 Linux amd64-64 Compressed References 20171027_36 (JIT enabled, AOT enabled)
-OpenJ9   - 292f272
-OMR      - 9ea665d
-OpenJDK  - 640ef65 based on )
+***>>> adoptopenjdk-jdk11-hotspot-distroless <<<***
+Picked up JAVA_TOOL_OPTIONS: -XX:+UseContainerSupport -XX:MaxRAMPercentage=96
+Hello World
+Picked up JAVA_TOOL_OPTIONS: -XX:+UseContainerSupport -XX:MaxRAMPercentage=96
+openjdk version "11" 2018-09-25
+OpenJDK Runtime Environment AdoptOpenJDK (build 11+28)
+OpenJDK 64-Bit Server VM AdoptOpenJDK (build 11+28, mixed mode)
+Picked up JAVA_TOOL_OPTIONS: -XX:+UseContainerSupport -XX:MaxRAMPercentage=96
+VM settings:
+    Max. Heap Size (Estimated): 951.25M
+    Using VM: OpenJDK 64-Bit Server VM
 
-$ docker run -it --rm --entrypoint /app/bin/java mbarbero/example-app:openjdk9-openj9-alpine -version
-openjdk version "9-internal"
-OpenJDK Runtime Environment (build 9-internal+0-adhoc.jenkins.openjdk)
-Eclipse OpenJ9 VM (build 2.9, JRE 9 Linux amd64-64 Compressed References 20171027_36 (JIT enabled, AOT enabled)
-OpenJ9   - 292f272
-OMR      - 9ea665d
-OpenJDK  - 640ef65 based on )
+java.base@11
+tech.barbero.contained.java.example@0.0.1-SNAPSHOT
 
-$ docker run -it --rm --entrypoint /app/bin/java mbarbero/example-app:official-openjdk9-hotspot -version
-openjdk version "9.0.1"
-OpenJDK Runtime Environment (build 9.0.1+11-Debian-1)
-OpenJDK 64-Bit Server VM (build 9.0.1+11-Debian-1, mixed mode)
+***>>> adoptopenjdk-jdk11-openj9-alpine <<<***
+Hello World
+openjdk version "11.0.1" 2018-10-16
+OpenJDK Runtime Environment AdoptOpenJDK (build 11.0.1+13)
+Eclipse OpenJ9 VM AdoptOpenJDK (build openj9-0.11.0, JRE 11 Linux amd64-64-Bit Compressed References 20181020_70 (JIT enabled, AOT enabled)
+OpenJ9   - 090ff9dc
+OMR      - ea548a66
+JCL      - f62696f378 based on jdk-11.0.1+13)
+VM settings:
+    Max. Heap Size (Estimated): 983.00M
+    Using VM: Eclipse OpenJ9 VM
+
+java.base@11.0.1
+tech.barbero.contained.java.example@0.0.1-SNAPSHOT
+
+***>>> adoptopenjdk-jdk11-hotspot-alpine <<<***
+Picked up JAVA_TOOL_OPTIONS: -XX:+UseContainerSupport -XX:MaxRAMPercentage=96
+Hello World
+Picked up JAVA_TOOL_OPTIONS: -XX:+UseContainerSupport -XX:MaxRAMPercentage=96
+openjdk version "11" 2018-09-25
+OpenJDK Runtime Environment AdoptOpenJDK (build 11+28)
+OpenJDK 64-Bit Server VM AdoptOpenJDK (build 11+28, mixed mode)
+Picked up JAVA_TOOL_OPTIONS: -XX:+UseContainerSupport -XX:MaxRAMPercentage=96
+VM settings:
+    Max. Heap Size (Estimated): 951.25M
+    Using VM: OpenJDK 64-Bit Server VM
+
+java.base@11
+tech.barbero.contained.java.example@0.0.1-SNAPSHOT
+
+***>>> openjdk-jdk11-distroless <<<***
+Picked up JAVA_TOOL_OPTIONS: -XX:+UseContainerSupport -XX:MaxRAMPercentage=96
+Hello World
+Picked up JAVA_TOOL_OPTIONS: -XX:+UseContainerSupport -XX:MaxRAMPercentage=96
+openjdk version "11.0.1" 2018-10-16
+OpenJDK Runtime Environment (build 11.0.1+13-Debian-2)
+OpenJDK 64-Bit Server VM (build 11.0.1+13-Debian-2, mixed mode)
+Picked up JAVA_TOOL_OPTIONS: -XX:+UseContainerSupport -XX:MaxRAMPercentage=96
+VM settings:
+    Max. Heap Size (Estimated): 951.25M
+    Using VM: OpenJDK 64-Bit Server VM
+
+java.base@11.0.1
+tech.barbero.contained.java.example@0.0.1-SNAPSHOT
+
+***>>> openjdk-jdk11-debian-unstable-slim <<<***
+Picked up JAVA_TOOL_OPTIONS: -XX:+UseContainerSupport -XX:MaxRAMPercentage=96
+Hello World
+Picked up JAVA_TOOL_OPTIONS: -XX:+UseContainerSupport -XX:MaxRAMPercentage=96
+openjdk version "11.0.1" 2018-10-16
+OpenJDK Runtime Environment (build 11.0.1+13-Debian-2)
+OpenJDK 64-Bit Server VM (build 11.0.1+13-Debian-2, mixed mode)
+Picked up JAVA_TOOL_OPTIONS: -XX:+UseContainerSupport -XX:MaxRAMPercentage=96
+VM settings:
+    Max. Heap Size (Estimated): 951.25M
+    Using VM: OpenJDK 64-Bit Server VM
+
+java.base@11.0.1
+tech.barbero.contained.java.example@0.0.1-SNAPSHOT
 ```
 
 ## TODO
@@ -69,3 +140,6 @@ OpenJDK 64-Bit Server VM (build 9.0.1+11-Debian-1, mixed mode)
  * Do benchmarks
  * Experiments with OpenJ9 specific features
  * Test larger apps
+
+## Note
+ * PetClinc code modifications come from https://github.com/panga/spring-petclinic/tree/jdk11
