@@ -27,20 +27,6 @@ mbarbero/distroless         jbase-libgcc1-unstable                  17.8MB
 mbarbero/distroless         jbase-libgcc1-libstdcpp6-unstable       19.4MB
 ```
 
-## Example app
-```
-$ docker run -it --rm mbarbero/example-app:openjdk9-hotspot World!
-Hello World!
-$ docker run -it --rm mbarbero/example-app:openjdk9-hotspot-alpine World!
-Hello World!
-$ docker run -it --rm mbarbero/example-app:openjdk9-openj9 World!
-Hello World!
-$ docker run -it --rm mbarbero/example-app:openjdk9-openj9-alpine World!
-Hello World!
-$ docker run -it --rm mbarbero/example-app:official-openjdk9-hotspot World!
-Hello World!
-```
-
 ## Java versions
 ```
 $ example-app/test-versions.sh
