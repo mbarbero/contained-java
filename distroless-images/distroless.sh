@@ -82,7 +82,7 @@ _cleanup_layer() {
 	rm -rf ${layer}/usr/share/common-licenses
 	rm -rf ${layer}/usr/share/lintian
 	
-	find "${1}" -depth -type d -empty -exec !-name tmp rmdir "{}" \;
+	find "${1}" -depth -type d -empty -not -name tmp -exec rmdir "{}" \;
 }
 
 _import_parent_image() {
